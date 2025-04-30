@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 
 interface SubscriptionWithPeriodEnd extends Stripe.Subscription {
-    current_period_end?: number; // Or the correct type if you know it
+    current_period_end?: number; 
 }
 export async function POST(req:Request){
     const body = await req.text();
