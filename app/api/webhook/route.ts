@@ -4,6 +4,9 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 
+interface SubscriptionWithPeriodEnd extends Stripe.Subscription {
+    current_period_end?: number; // Or the correct type if you know it
+}
 export async function POST(req:Request){
     const body = await req.text();
     const signature = (await headers()).get("Stripe-Signature") as string;
@@ -32,7 +35,7 @@ export async function POST(req:Request){
                 stripeSubscriptionId : subscription.id,
                 stripeCustomerId : subscription.customer as string,
                 stripePriceId : subscription.items.data[0].price.id,
-                stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000)
+                stripeCurrentPeriodEnd: new Date((subscription as SubscriptionWithPeriodEnd).current_period_end! * 1000)
             }
         })
     }
@@ -48,9 +51,7 @@ export async function POST(req:Request){
             },
             data : {
                 stripePriceId : subscription.items.data[0].price.id,
-                stripeCurrentPeriodEnd : new Date(
-                    subscription.current_period_end * 1000
-                )
+                stripeCurrentPeriodEnd : new Date((subscription as SubscriptionWithPeriodEnd).current_period_end! * 1000)
             }
         })
     }

@@ -30,6 +30,6 @@ export const checkSubscription = async() => {
 
 
 
-    return isValid
+    return false
 }
 
