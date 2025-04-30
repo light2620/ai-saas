@@ -7,13 +7,13 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // Make sure this is defined
 });
 
-console.log("api key", process.env.OPENAI_API_KEY)
+
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
     const body = await req.json();
     const { messages } = body;
-
+ 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -22,7 +22,8 @@ export async function POST(req: Request) {
       return new NextResponse("Messages are required", { status: 400 });
     }
     const freeTrial = await checkApiLimit();
-    const isPro = checkSubscription();
+    const isPro = await checkSubscription();
+
      if(!freeTrial && !isPro){
       return new NextResponse("Free Trial has expired",{status : 403})
     }

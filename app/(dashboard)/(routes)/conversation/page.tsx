@@ -34,16 +34,14 @@ const ConversationPage = () => {
   })
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Form submitted with values:", values);
+
     try {
       const userMessage: ChatMessage = {
         role: "user",
         content: values.prompt
       }
       const newMessages = [...messages, userMessage];
-      console.log("Sending messages to API:", newMessages);
       const response = await axios.post("/api/conversation", {messages: newMessages});
-      console.log("API Response:", response);
       setMessages((current) => [...current, userMessage, response.data])
       form.reset();
     } catch (err: any) {

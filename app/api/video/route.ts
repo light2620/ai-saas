@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     if (!userId) return new NextResponse("Unauthorized", { status: 401 });
     if (!prompt) return new NextResponse("Prompt is required", { status: 400 });
     const freeTrial = await checkApiLimit();
-        const isPro = checkSubscription();
+    const isPro = await checkSubscription();
          if(!freeTrial && !isPro){
           return new NextResponse("Free Trial has expired",{status : 403})
         }
