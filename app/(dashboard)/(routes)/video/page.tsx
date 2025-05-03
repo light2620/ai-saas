@@ -11,15 +11,12 @@ import {Form, FormControl, FormItem, FormField} from '@/components/ui/form'
 import {Input} from '@/components/ui/input'
 import {Button} from '@/components/ui/button'
 import {useRouter} from 'next/navigation'
-
 import Loader from '@/components/Loader'
 import Empty from '@/components/Empty'
-import {useProModal} from '@/hooks/use-pro-modal'
 import toast from 'react-hot-toast'
 
 const VideoPage = () => {
   const router = useRouter();
-  const proModal = useProModal();
   const [video, setVideo] = useState<string>()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,9 +35,7 @@ const VideoPage = () => {
       setVideo(response.data.videoUrl)
       form.reset();
     } catch (err: any) {
-      if(err?.response?.status === 403){
-        proModal.onOpen()
-      }else toast.error("something went wront");
+      toast.error("something went wront");
     } finally {
      
       router.refresh()

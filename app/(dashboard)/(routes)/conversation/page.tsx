@@ -16,7 +16,6 @@ import Empty from '@/components/Empty'
 import {cn} from '@/lib/utils'
 import {UserAvatar} from '@/components/User-Avatar'
 import {BotAvatar} from '@/components/Bot-Avatar'
-import {useProModal} from '@/hooks/use-pro-modal'
 import toast from 'react-hot-toast'
 type ChatMessage = {
   role: "user" | "assistant" | "system";
@@ -24,7 +23,6 @@ type ChatMessage = {
 };
 const ConversationPage = () => {
   const router = useRouter();
-  const proModal = useProModal();
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,11 +43,8 @@ const ConversationPage = () => {
       setMessages((current) => [...current, userMessage, response.data])
       form.reset();
     } catch (err: any) {
-      if(err?.response?.status === 403){
-        proModal.onOpen()
-      }else{
         toast.error("something went wront");
-      }
+     
     } finally {
       router.refresh()
 

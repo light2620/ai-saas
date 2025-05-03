@@ -14,12 +14,10 @@ import {useRouter} from 'next/navigation'
 
 import Loader from '@/components/Loader'
 import Empty from '@/components/Empty'
-import {useProModal} from '@/hooks/use-pro-modal'
 import toast from 'react-hot-toast'
 
 const MusicPage = () => {
   const router = useRouter();
-     const proModal = useProModal();
   const [music, setMusic] = useState<string>()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,9 +36,7 @@ const MusicPage = () => {
       setMusic(response.data.audio)
       form.reset();
     } catch (err: any) {
-      if(err?.response?.status === 403){
-        proModal.onOpen()
-      }else toast.error("something went wront");
+       toast.error("something went wront");
     } finally {
       router.refresh()
 
